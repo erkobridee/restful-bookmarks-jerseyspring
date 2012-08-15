@@ -82,5 +82,5 @@ Archetype do Maven que gerou a estrutura inicial do projeto
     -DarchetypeGroupId=org.apache.maven.archetypes \
     -DarchetypeArtifactId=maven-archetype-webapp \
     -Dversion=1.0 \
-    -DgroupId=com.erkobridee.restful.bookmarks \
+    -DgroupId=com.erkobridee.restful.bookmarks.jerseyspring \
     -DartifactId=restful-bookmarks-jerseyspring</code></pre>
