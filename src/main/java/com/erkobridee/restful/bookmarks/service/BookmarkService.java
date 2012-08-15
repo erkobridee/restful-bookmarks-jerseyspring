@@ -20,53 +20,57 @@ import com.erkobridee.restful.bookmarks.dao.IBookmarkDAO;
 import com.erkobridee.restful.bookmarks.entity.Bookmark;
 
 @Component
-@Scope( "prototype" )
+@Scope("prototype")
 @Path("/bookmarks")
 public class BookmarkService {
 
-	//--------------------------------------------------------------------------
-	
+	// --------------------------------------------------------------------------
+
 	@Autowired
 	private IBookmarkDAO dao;
-	
-	//--------------------------------------------------------------------------
-	
+
+	// --------------------------------------------------------------------------
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Bookmark> getAll() {
 		return dao.listAll();
 	}
-	
-	@GET @Path("{id}")
+
+	@GET
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark getById(@PathParam("id") String id) {
 		return dao.findById(Long.valueOf(id));
 	}
-	
-	@GET @Path("search/{name}")
+
+	@GET
+	@Path("search/{name}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Bookmark> getByName(@PathParam("name") String name) {
 		return dao.findByName(name);
 	}
-	
+
 	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark insert(Bookmark value) {
 		return dao.save(value);
 	}
-	
-	@PUT @Path("{id}")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+
+	@PUT
+	@Path("{id}")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark update(Bookmark value) {
 		return dao.save(value);
 	}
-	
-	@DELETE @Path("{id}")
+
+	@DELETE
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void remove(@PathParam("id") String id) {
 		dao.remove(Long.valueOf(id));
 	}
-	
+
 }

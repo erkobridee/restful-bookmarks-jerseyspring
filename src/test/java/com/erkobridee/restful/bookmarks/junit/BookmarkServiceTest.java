@@ -14,66 +14,73 @@ import com.erkobridee.restful.bookmarks.entity.Bookmark;
 import com.erkobridee.restful.bookmarks.service.BookmarkService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="file:src/main/resources/applicationContext.xml")
+@ContextConfiguration(locations = "file:src/main/resources/applicationContext.xml")
 public class BookmarkServiceTest {
 
 	@Autowired
 	private BookmarkService service;
-	
+
 	private static Bookmark vo;
-	
-	@Test // RESTful POST
+
+	@Test
+	// RESTful POST
 	public void testInsert() {
 		vo = new Bookmark();
 		vo.setName("BookmarkServiceTest Name");
 		vo.setDescription("BookmarkServiceTest Description");
-		vo.setUrl("http://service.bookmarkdomain.test/" + System.currentTimeMillis() + "/");
+		vo.setUrl("http://service.bookmarkdomain.test/"
+				+ System.currentTimeMillis() + "/");
 		vo = service.insert(vo);
-		
+
 		Assert.assertNotNull(vo.getId());
 	}
-	
-	@Test // RESTful GET 	.../{id}
-	public void testGetById() {		
-		Assert.assertNotNull(service.getById( vo.getId().toString() ));
+
+	@Test
+	// RESTful GET .../{id}
+	public void testGetById() {
+		Assert.assertNotNull(service.getById(vo.getId().toString()));
 	}
-	
-	@Test // RESTful GET 	.../search/{name}
+
+	@Test
+	// RESTful GET .../search/{name}
 	public void testGetByName() {
 		List<Bookmark> list = service.getByName(vo.getName());
-		
-		Assert.assertTrue( list.size() > 0 );
+
+		Assert.assertTrue(list.size() > 0);
 	}
-	
-	@Test // RESTful PUT	.../{id}
+
+	@Test
+	// RESTful PUT .../{id}
 	public void testUpdate() {
 		String nameUpdated = vo.getName() + "++";
-		
-		vo.setName( nameUpdated );
-		vo.setDescription( vo.getDescription() + "++" );
-		vo.setUrl( vo.getUrl() + System.currentTimeMillis() );
-		
+
+		vo.setName(nameUpdated);
+		vo.setDescription(vo.getDescription() + "++");
+		vo.setUrl(vo.getUrl() + System.currentTimeMillis());
+
 		vo = service.update(vo);
-		
-		Assert.assertEquals( vo.getName(), nameUpdated);
+
+		Assert.assertEquals(vo.getName(), nameUpdated);
 	}
-	
-	@Test // RESTful GET
+
+	@Test
+	// RESTful GET
 	public void testGetAll() {
 		List<Bookmark> list = service.getAll();
-		
-		Assert.assertTrue( list.size() > 0 );
+
+		Assert.assertTrue(list.size() > 0);
 	}
-	
-	@Test // RESTful DELETE
+
+	@Test
+	// RESTful DELETE
 	public void testDelete() {
-		String id = vo.getId().toString(); 
-		
-		service.remove( id );
-		
-		vo = service.getById( id );
-		
-		Assert.assertNull( vo );
+		String id = vo.getId().toString();
+
+		service.remove(id);
+
+		vo = service.getById(id);
+
+		Assert.assertNull(vo);
 	}
-	
+
 }
