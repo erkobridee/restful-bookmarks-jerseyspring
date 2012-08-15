@@ -1,4 +1,4 @@
-package com.erkobridee.restful.bookmarks.service;
+package com.erkobridee.restful.bookmarks.jerseyspring.service;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.erkobridee.restful.bookmarks.dao.IBookmarkDAO;
-import com.erkobridee.restful.bookmarks.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.dao.IBookmarkDAO;
+import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
 
 @Component
 @Scope("prototype")
