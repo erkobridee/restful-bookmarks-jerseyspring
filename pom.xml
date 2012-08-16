@@ -15,7 +15,8 @@
 		<project.build.sourceEncoding>${default.encoding}</project.build.sourceEncoding>
 
 		<jersey.version>1.13</jersey.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
+		
+		<spring.version>3.1.1.RELEASE</spring.version>
 
 		<hibernate-core.version>3.3.2.GA</hibernate-core.version>
 		<hibernate-annotations.version>3.4.0.GA</hibernate-annotations.version>
