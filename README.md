@@ -29,7 +29,7 @@ Quanto as versões no Servidor:
 Um projeto que auxiliou neste projeto foi o [Wine Cellar Java](https://github.com/ccoenraets/wine-cellar-java), que é um exemplo de uso do Jersey em uma webapp Java. Além do post do Christophe Coenraets - [Sample Application with Angular.js](http://coenraets.org/blog/2012/02/sample-application-with-angular-js/) e [Using Backbone.js with a RESTful Java Back-End](http://coenraets.org/blog/2012/01/using-backbone-js-with-a-restful-java-back-end/).
 
 Montando o ambiente local para uso desse projeto
-----------------------------------
+------------------------------------------------
 O projeto disponibilizado no github, não possui nenhum arquivo para incluí-lo diretamente no Eclipse. Então após baixar o projeto no seu computador local.
 
 Conforme especificado anteriormente, os itens citados do ambiente de desenvolvimento serão necessários.
@@ -61,7 +61,8 @@ Feito o download/clone do projeto para a sua máquina local, realize o respectiv
 
 
 Quanto ao RESTful do projeto
------------------
+----------------------------
+A definição do método a ser executado é definido no cabeçalho da requisição enviada para o servidor.
 
 * **GET** - recupera 1 ou mais bookmarks
 	* [.../api/bookmarks/]() - lista todos os bookmarks
@@ -76,7 +77,7 @@ Quanto ao RESTful do projeto
 
 
 Archetype do Maven que gerou a estrutura inicial do projeto
-------------------
+-----------------------------------------------------------
 
 <pre><code>mvn archetype:generate \
     -DarchetypeGroupId=org.apache.maven.archetypes \
