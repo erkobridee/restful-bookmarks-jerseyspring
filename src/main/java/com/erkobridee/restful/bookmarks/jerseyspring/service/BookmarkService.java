@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,10 @@ import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
 public class BookmarkService {
 
 	// --------------------------------------------------------------------------
+	
+	private Logger log = LoggerFactory.getLogger(BookmarkService.class);
+	
+	// --------------------------------------------------------------------------
 
 	@Autowired
 	private IBookmarkDAO dao;
@@ -34,6 +40,7 @@ public class BookmarkService {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Bookmark> getAll() {
+		log.debug("getAll");
 		return dao.listAll();
 	}
 
@@ -41,6 +48,7 @@ public class BookmarkService {
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark getById(@PathParam("id") String id) {
+		log.debug("getById: " + id);
 		return dao.findById(Long.valueOf(id));
 	}
 
@@ -48,6 +56,7 @@ public class BookmarkService {
 	@Path("search/{name}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Bookmark> getByName(@PathParam("name") String name) {
+		log.debug("getByName: " + name);
 		return dao.findByName(name);
 	}
 
@@ -55,6 +64,7 @@ public class BookmarkService {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark insert(Bookmark value) {
+		log.debug("insert");
 		return dao.save(value);
 	}
 
@@ -63,6 +73,7 @@ public class BookmarkService {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Bookmark update(Bookmark value) {
+		log.debug("update");
 		return dao.save(value);
 	}
 
@@ -70,7 +81,8 @@ public class BookmarkService {
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void remove(@PathParam("id") String id) {
-		dao.remove(Long.valueOf(id));
+		boolean flag = dao.remove(Long.valueOf(id));
+		log.debug("remove: " + id + " | status: " + flag);
 	}
 
 }

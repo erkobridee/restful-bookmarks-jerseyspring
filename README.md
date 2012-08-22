@@ -21,6 +21,7 @@ Utilizado neste projeto
 	* [Spring](http://www.springsource.org/)
 	* [Hibernate](http://www.hibernate.org/)
 	* [HSQLDB](http://hsqldb.org/)
+	* [Jetty](http://jetty.codehaus.org/jetty/) para testes, gerenciado pelo Maven
 
 Quanto as versões no Servidor:
 
@@ -85,3 +86,23 @@ Archetype do Maven que gerou a estrutura inicial do projeto
     -Dversion=1.0 \
     -DgroupId=com.erkobridee.restful.bookmarks.jerseyspring \
     -DartifactId=restful-bookmarks-jerseyspring</code></pre>
+
+Alterações
+----------
+
+* [v1](https://github.com/erkobridee/restful-bookmarks-jerseyspring/tree/v1) 
+	* versão inicial funcional
+* v2 - ***versão atual***
+	* Atualização do Spring para versão 3.1.1.RELEASE
+	* Atualização das configurações 
+	* Inclusão do Jetty para teste da aplicação diretamente pelo Maven
+	
+		`mvn jetty:run` - a aplicação irá executar na url: `http://localhost:9090`
+	
+	
+	* Inclusão de testes de Integração
+	
+		`mvn clean integration Test` - 
+		durante a fase de teste de integração a aplicação irá testar a url: `http://localhost:8080/restful-bookmarks-jerseyspring/`
+
+

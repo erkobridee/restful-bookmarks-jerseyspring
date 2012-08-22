@@ -14,7 +14,7 @@ import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
 import com.erkobridee.restful.bookmarks.jerseyspring.service.BookmarkService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:src/main/resources/applicationContext.xml")
+@ContextConfiguration(locations = "classpath:META-INF/spring/applicationContext.xml")
 public class BookmarkServiceTest {
 
 	@Autowired

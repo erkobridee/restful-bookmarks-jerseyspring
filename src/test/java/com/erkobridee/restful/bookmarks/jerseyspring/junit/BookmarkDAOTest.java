@@ -13,7 +13,7 @@ import com.erkobridee.restful.bookmarks.jerseyspring.dao.IBookmarkDAO;
 import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:src/main/resources/applicationContext.xml")
+@ContextConfiguration(locations = "classpath:META-INF/spring/applicationContext.xml")
 public class BookmarkDAOTest {
 
 	@Autowired

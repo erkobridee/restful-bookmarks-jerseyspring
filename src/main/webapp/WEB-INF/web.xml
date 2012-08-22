@@ -5,14 +5,16 @@
 <web-app>
   	<display-name>RESTful Bookmarks Web Application</display-name>
   
+  	<!-- @begin: Spring Context -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
+		<param-value>classpath:META-INF/spring/applicationContext.xml</param-value>
 	</context-param>  
   
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>  
+	<!-- @end: Spring Context -->
   
   	<!--  @begin: Jersey def -->
 	<servlet>
@@ -20,7 +22,7 @@
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
 		<init-param>
 	  		<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>com.erkobridee.restful.bookmarks.service; org.codehaus.jackson.jaxrs</param-value>
+			<param-value>com.erkobridee.restful.bookmarks.jerseyspring.service; org.codehaus.jackson.jaxrs</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
