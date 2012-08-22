@@ -10,7 +10,7 @@ Utilizado neste projeto
 	* [Maven](http://maven.apache.org/) 3
 	* [Eclipse](http://eclipse.org/) Juno JEE
 	* [Apache Tomcat](http://tomcat.apache.org/) 6.x
-	* Java 1.6+
+	* [Java](http://www.java.com/) 1.6+
 
 * Cliente
 	* [AngularJS](http://angularjs.org/) 1.0.1
