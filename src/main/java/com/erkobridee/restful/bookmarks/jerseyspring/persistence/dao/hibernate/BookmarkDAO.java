@@ -1,4 +1,4 @@
-package com.erkobridee.restful.bookmarks.jerseyspring.dao.impl;
+package com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao.hibernate;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.erkobridee.restful.bookmarks.jerseyspring.dao.IBookmarkDAO;
-import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao.IBookmarkDAO;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 
 @Repository("bookmarkDAO")
 public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {

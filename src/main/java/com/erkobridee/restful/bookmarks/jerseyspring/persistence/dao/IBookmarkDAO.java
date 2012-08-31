@@ -1,10 +1,10 @@
-package com.erkobridee.restful.bookmarks.jerseyspring.dao;
+package com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao;
 
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 
 @Transactional
 public interface IBookmarkDAO {

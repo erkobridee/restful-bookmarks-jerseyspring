@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.erkobridee.restful.bookmarks.jerseyspring.dao.IBookmarkDAO;
-import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao.IBookmarkDAO;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 
 @Component
 @Scope("prototype")

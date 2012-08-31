@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.erkobridee.restful.bookmarks.jerseyspring.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 import com.erkobridee.restful.bookmarks.jerseyspring.service.BookmarkService;
 
 @RunWith(SpringJUnit4ClassRunner.class)

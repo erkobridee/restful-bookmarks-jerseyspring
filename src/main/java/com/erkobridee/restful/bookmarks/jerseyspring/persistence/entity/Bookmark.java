@@ -1,4 +1,4 @@
-package com.erkobridee.restful.bookmarks.jerseyspring.entity;
+package com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity;
 
 import java.io.Serializable;
 
