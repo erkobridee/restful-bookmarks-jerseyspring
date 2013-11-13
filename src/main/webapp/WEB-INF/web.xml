@@ -29,7 +29,7 @@
 	
 	<servlet-mapping>
 		<servlet-name>Jersey</servlet-name>
-		<url-pattern>/api/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	<!--  @end: Jersey def -->  
 	
