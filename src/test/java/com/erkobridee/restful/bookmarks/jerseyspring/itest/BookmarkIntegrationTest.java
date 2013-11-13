@@ -31,7 +31,7 @@ public class BookmarkIntegrationTest {
 		
 		String url = "http://localhost:";		
 		url += port + "/";
-		url += app + "/api/";
+		url += app + "/rest/";
 		url += model;
 		
 		return url;

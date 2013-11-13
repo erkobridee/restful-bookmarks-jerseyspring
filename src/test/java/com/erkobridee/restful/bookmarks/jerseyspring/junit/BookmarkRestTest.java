@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultData;
 import com.erkobridee.restful.bookmarks.jerseyspring.rest.BookmarkRest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,7 +31,7 @@ public class BookmarkRestTest {
 		vo.setDescription("BookmarkServiceTest Description");
 		vo.setUrl("http://service.bookmarkdomain.test/"
 				+ System.currentTimeMillis() + "/");
-		vo = rest.insert(vo);
+		vo = rest.create(vo);
 
 		Assert.assertNotNull(vo.getId());
 	}
@@ -38,15 +39,15 @@ public class BookmarkRestTest {
 	@Test
 	// RESTful GET .../{id}
 	public void testGetById() {
-		Assert.assertNotNull(rest.getById(vo.getId().toString()));
+		Assert.assertNotNull(rest.get(vo.getId().toString()));
 	}
 
 	@Test
 	// RESTful GET .../search/{name}
 	public void testGetByName() {
-		List<Bookmark> list = rest.getByName(vo.getName());
+		ResultData<List<Bookmark>> r = rest.search(vo.getName(), 1, 10);
 
-		Assert.assertTrue(list.size() > 0);
+		Assert.assertTrue(r.getData().size() > 0);
 	}
 
 	@Test
@@ -66,9 +67,9 @@ public class BookmarkRestTest {
 	@Test
 	// RESTful GET
 	public void testGetAll() {
-		List<Bookmark> list = rest.getAll();
+		ResultData<List<Bookmark>> r = rest.getList(1, 10);
 
-		Assert.assertTrue(list.size() > 0);
+		Assert.assertTrue(r.getData().size() > 0);
 	}
 
 	@Test
@@ -78,7 +79,7 @@ public class BookmarkRestTest {
 
 		rest.remove(id);
 
-		vo = rest.getById(id);
+		vo = rest.get(id);
 
 		Assert.assertNull(vo);
 	}
