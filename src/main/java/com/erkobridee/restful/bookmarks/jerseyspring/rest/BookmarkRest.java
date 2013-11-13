@@ -1,4 +1,4 @@
-package com.erkobridee.restful.bookmarks.jerseyspring.service;
+package com.erkobridee.restful.bookmarks.jerseyspring.rest;
 
 import java.util.List;
 
@@ -24,11 +24,11 @@ import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark
 @Component
 @Scope("prototype")
 @Path("/bookmarks")
-public class BookmarkService {
+public class BookmarkRest {
 
 	// --------------------------------------------------------------------------
 	
-	private Logger log = LoggerFactory.getLogger(BookmarkService.class);
+	private Logger log = LoggerFactory.getLogger(BookmarkRest.class);
 	
 	// --------------------------------------------------------------------------
 

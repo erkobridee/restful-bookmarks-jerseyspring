@@ -11,14 +11,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
-import com.erkobridee.restful.bookmarks.jerseyspring.service.BookmarkService;
+import com.erkobridee.restful.bookmarks.jerseyspring.rest.BookmarkRest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/spring/applicationContext.xml")
-public class BookmarkServiceTest {
+public class BookmarkRestTest {
 
 	@Autowired
-	private BookmarkService service;
+	private BookmarkRest rest;
 
 	private static Bookmark vo;
 
@@ -30,7 +30,7 @@ public class BookmarkServiceTest {
 		vo.setDescription("BookmarkServiceTest Description");
 		vo.setUrl("http://service.bookmarkdomain.test/"
 				+ System.currentTimeMillis() + "/");
-		vo = service.insert(vo);
+		vo = rest.insert(vo);
 
 		Assert.assertNotNull(vo.getId());
 	}
@@ -38,13 +38,13 @@ public class BookmarkServiceTest {
 	@Test
 	// RESTful GET .../{id}
 	public void testGetById() {
-		Assert.assertNotNull(service.getById(vo.getId().toString()));
+		Assert.assertNotNull(rest.getById(vo.getId().toString()));
 	}
 
 	@Test
 	// RESTful GET .../search/{name}
 	public void testGetByName() {
-		List<Bookmark> list = service.getByName(vo.getName());
+		List<Bookmark> list = rest.getByName(vo.getName());
 
 		Assert.assertTrue(list.size() > 0);
 	}
@@ -58,7 +58,7 @@ public class BookmarkServiceTest {
 		vo.setDescription(vo.getDescription() + "++");
 		vo.setUrl(vo.getUrl() + System.currentTimeMillis());
 
-		vo = service.update(vo);
+		vo = rest.update(vo);
 
 		Assert.assertEquals(vo.getName(), nameUpdated);
 	}
@@ -66,7 +66,7 @@ public class BookmarkServiceTest {
 	@Test
 	// RESTful GET
 	public void testGetAll() {
-		List<Bookmark> list = service.getAll();
+		List<Bookmark> list = rest.getAll();
 
 		Assert.assertTrue(list.size() > 0);
 	}
@@ -76,9 +76,9 @@ public class BookmarkServiceTest {
 	public void testDelete() {
 		String id = vo.getId().toString();
 
-		service.remove(id);
+		rest.remove(id);
 
-		vo = service.getById(id);
+		vo = rest.getById(id);
 
 		Assert.assertNull(vo);
 	}

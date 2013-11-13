@@ -17,7 +17,7 @@ import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring/itest-context.xml")
-public class BookmarkRestTest {
+public class BookmarkIntegrationTest {
 
 	@Autowired
 	private RestTemplate restTemplate;
