@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring/itest-context.xml")
@@ -52,9 +53,8 @@ public class BookmarkIntegrationTest {
 	@Test
 	@SuppressWarnings( "unchecked" )
 	public void testListAll() {
-		List<Bookmark> list = restTemplate.getForObject(getBaseUrl(), List.class, new Object[]{});
-		
-		Assert.assertTrue(list.size() > 0);
+		ResultData<List<Bookmark>> rd = restTemplate.getForObject(getBaseUrl(), ResultData.class, new Object[]{});
+		Assert.assertTrue(rd.getData().size() > 0);
 	}
 	
 	private Bookmark getById(Long id) {		
@@ -75,21 +75,21 @@ public class BookmarkIntegrationTest {
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public List<Bookmark> getByName(String name) {
+	public ResultData<List<Bookmark>> getByName(String name) {
 		Map<String, String> vars = Collections.singletonMap("name", name + "");		
-		return restTemplate.getForObject(getBaseUrl()+"/search/{name}", List.class, vars);
+		return restTemplate.getForObject(getBaseUrl()+"/search/{name}", ResultData.class, vars);
 	}
 	
 	@Test
 	public void testGetByInvalidName() {
-		List<Bookmark> list = getByName( "IT RESTFul Invalid Name" );
-		Assert.assertFalse(list.size() > 0);
+		ResultData<List<Bookmark>> rd = getByName( "IT RESTFul Invalid Name" );
+		Assert.assertFalse(rd.getData().size() > 0);
 	}
 	
 	@Test
 	public void testGetByName() {
-		List<Bookmark> list = getByName(vo.getName());	
-		Assert.assertTrue(list.size() > 0);
+		ResultData<List<Bookmark>> rd = getByName(vo.getName());	
+		Assert.assertTrue(rd.getData().size() > 0);
 	}
 	
 	@Test
