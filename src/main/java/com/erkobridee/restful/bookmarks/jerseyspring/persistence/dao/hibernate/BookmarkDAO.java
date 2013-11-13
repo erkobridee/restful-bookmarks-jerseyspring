@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao.IBookmarkDAO;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
+import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultData;
 
 @Repository("bookmarkDAO")
 public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
@@ -21,7 +24,7 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 	// --------------------------------------------------------------------------
 	
 	private Logger log = LoggerFactory.getLogger(BookmarkDAO.class);
-
+	
 	// --------------------------------------------------------------------------
 
 	@Autowired
@@ -36,10 +39,9 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 	// --------------------------------------------------------------------------
 
 	public void generateInitData() {
+		Integer bookmarksCount = this.count();
 
-		List<Bookmark> list = this.listAll();
-
-		if (list.size() == 0) {
+		if (bookmarksCount == 0) {
 			log.debug("generateInitData");
 			
 			Bookmark vo;
@@ -74,11 +76,43 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 
 	// --------------------------------------------------------------------------
 
+	public Integer count() {
+		return this.count(null);
+	}
+	
+	public Integer count(Criterion criterion) {		
+		Criteria c = super.getSession().createCriteria(Bookmark.class);
+		c.setProjection(Projections.rowCount());
+		
+		if(criterion != null) {
+			c.add(criterion);
+		}
+		
+		return (Integer)c.list().get(0);
+	}
+	
+	public ResultData<List<Bookmark>> list() {
+		return this.list(0, 0);
+	}
+	
 	@SuppressWarnings("unchecked")
-	public List<Bookmark> listAll() {
+	public ResultData<List<Bookmark>> list(int page, int size) {
 		log.debug("listAll");
 		Criteria c = super.getSession().createCriteria(Bookmark.class);
-		return c.list();
+		
+		if(size == 0) {
+			size = 10;
+		}
+		c.setMaxResults(size);
+		
+		
+		if(page > 1) {
+			c.setFirstResult((page-1) * size);
+		} else {
+			c.setFirstResult(0);
+		}
+		
+		return new ResultData<List<Bookmark>>(c.list(), this.count(), page, size);
 	}
 
 	public Bookmark findById(Long id) {
@@ -86,12 +120,32 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 		return (Bookmark) super.getHibernateTemplate().get(Bookmark.class, id);
 	}
 
+	public ResultData<List<Bookmark>> findByName(String name) {
+		return this.findByName(name, 0, 0);
+	}
+	
 	@SuppressWarnings("unchecked")
-	public List<Bookmark> findByName(String name) {
+	public ResultData<List<Bookmark>> findByName(String name, int page, int size) {
 		log.debug("findByName: " + name);
+		
+		Criterion criterion = Restrictions.like("name", "%"+ name + "%" ); 
+		
 		Criteria c = super.getSession().createCriteria(Bookmark.class);
-		c.add(Restrictions.like("name", "%"+ name + "%" ));
-		return c.list();
+		c.add(criterion);
+		
+		if(size == 0) {
+			size = 10;
+		}
+		c.setMaxResults(size);
+		
+		
+		if(page > 1) {
+			c.setFirstResult((page-1) * size);
+		} else {
+			c.setFirstResult(0);
+		}
+		
+		return new ResultData<List<Bookmark>>(c.list(), this.count(criterion), page, size);
 	}
 
 	public Bookmark save(Bookmark value) {
