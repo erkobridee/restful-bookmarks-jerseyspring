@@ -2,6 +2,8 @@ package com.erkobridee.restful.bookmarks.jerseyspring.junit;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultData;
 import com.erkobridee.restful.bookmarks.jerseyspring.rest.BookmarkRest;
+import com.erkobridee.restful.bookmarks.jerseyspring.rest.resource.ResultMessage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:META-INF/spring/applicationContext.xml")
@@ -31,6 +34,7 @@ public class BookmarkRestTest {
 		vo.setDescription("BookmarkServiceTest Description");
 		vo.setUrl("http://service.bookmarkdomain.test/"
 				+ System.currentTimeMillis() + "/");
+		
 		vo = (Bookmark) rest.create(vo).getEntity();
 
 		Assert.assertNotNull(vo.getId());
@@ -79,9 +83,16 @@ public class BookmarkRestTest {
 
 		rest.remove(id);
 
-		vo = (Bookmark) rest.get(id).getEntity();
+		Response response = rest.get(id);
 
-		Assert.assertNull(vo);
+		boolean flag = response.getEntity() instanceof ResultMessage;
+		
+		Assert.assertTrue(flag);
+		
+		if(flag) {
+			ResultMessage rm = (ResultMessage) response.getEntity();
+			Assert.assertEquals(404, rm.getCode());
+		}
 	}
 
 }

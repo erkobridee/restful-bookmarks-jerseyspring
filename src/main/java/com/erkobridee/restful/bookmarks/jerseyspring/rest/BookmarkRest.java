@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
@@ -116,7 +117,7 @@ public class BookmarkRest {
 			
 			ResultMessage resultMessage = 
 				new ResultMessage(
-	                Status.NOT_FOUND.ordinal(), 
+	                Status.NOT_FOUND.getStatusCode(), 
 	                "id: " + id + " not found."
 	            );
 			
@@ -135,14 +136,18 @@ public class BookmarkRest {
 		
 		log.debug("insert");
 		Bookmark bookmark = dao.save(value);
-		URI location = uriInfo.getRequestUriBuilder().path("" + bookmark.getId()).build();
 		
-		return Response
-				.status(Status.CREATED)
-				.location(location)
+		ResponseBuilder rb = Response
+				.status(Status.CREATED)				
 				.header("Allow", "GET, PUT, DELETE")
-				.entity(bookmark)
-				.build();
+				.entity(bookmark); 
+		
+		if(uriInfo != null) {
+			URI location = uriInfo.getRequestUriBuilder().path("" + bookmark.getId()).build();
+			rb.location(location);
+		}
+		
+		return rb.build();
 	}
 
 	@PUT
@@ -172,7 +177,7 @@ public class BookmarkRest {
 		
 		if(flag) {
 			
-			message = new ResultMessage(Status.ACCEPTED.ordinal(), "id: " + id + " removed.");
+			message = new ResultMessage(Status.ACCEPTED.getStatusCode(), "id: " + id + " removed.");
 			
 			return Response
 					.status(Status.ACCEPTED)
@@ -181,7 +186,7 @@ public class BookmarkRest {
 			
 		} else {
 			
-			message = new ResultMessage(Status.NOT_FOUND.ordinal(), "id: " + id + " not found.");
+			message = new ResultMessage(Status.NOT_FOUND.getStatusCode(), "id: " + id + " not found.");
 			
 			return Response
 					.status(Status.NOT_FOUND)
