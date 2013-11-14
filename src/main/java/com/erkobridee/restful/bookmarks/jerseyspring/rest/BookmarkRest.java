@@ -100,14 +100,14 @@ public class BookmarkRest {
 
 	@GET
 	@Path("search/{find}")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response search(
 		@PathParam("find") String find,
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
 		log.debug("search: " + find + " | page: " + page + " | size: " + size);
-		
+
 		ResultData<List<Bookmark>> r = dao.findByName(find, page, size);
 		
 		return Response
@@ -116,21 +116,22 @@ public class BookmarkRest {
 				.header("Allow", "GET")
 				.location(getLocation())
 				.build();
+		
 	}
 	
 	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getList(
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
 		log.debug("getList | page: " + page + " | size: " + size);
 		
-		ResultData<List<Bookmark>> r = dao.list(page, size);
+		ResultData<List<Bookmark>> rd = dao.list(page, size);
 		
 		return Response
 				.status(Status.OK)
-				.entity(r)
+				.entity(rd)
 				.header("Allow", "GET, POST")
 				.location(getLocation())
 				.build();
@@ -138,7 +139,7 @@ public class BookmarkRest {
 
 	@GET
 	@Path("{id}")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response get(@PathParam("id") String id) {
 		log.debug("getById: " + id);
 		
@@ -170,8 +171,8 @@ public class BookmarkRest {
 	}
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response create(Bookmark value) {
 		
 		log.debug("insert");
@@ -188,8 +189,8 @@ public class BookmarkRest {
 
 	@PUT
 	@Path("{id}")
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response update(Bookmark value) {
 		
 		log.debug("update");
@@ -205,7 +206,7 @@ public class BookmarkRest {
 
 	@DELETE
 	@Path("{id}")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Response remove(@PathParam("id") String id) {
 		
 		boolean flag = dao.remove(Long.valueOf(id));
