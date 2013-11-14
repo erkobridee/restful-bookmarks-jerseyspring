@@ -16,8 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -54,10 +54,12 @@ public class BookmarkRest {
 	 * 	JAX-RS @QueryParam Example
 	 * 	http://www.mkyong.com/webservices/jax-rs/jax-rs-queryparam-example/
 	 * 
+	 * 	Jersey Docs
+	 * 	https://jersey.java.net/documentation/latest/uris-and-links.html
 	 * 
-	 * Java EE 6 Docs
-	 * http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.html
-	 * http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.ResponseBuilder.html
+	 * 	Java EE 6 Docs
+	 * 	http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.html
+	 * 	http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/Response.ResponseBuilder.html
 	 */
 
 	// --------------------------------------------------------------------------
@@ -74,28 +76,64 @@ public class BookmarkRest {
 	private IBookmarkDAO dao;
 
 	// --------------------------------------------------------------------------
+	
+	private URI getLocation() {
+		return getLocation("");
+	}
+	
+	private URI getLocation(Long id) {		
+		return getLocation("" + id);
+	}
+	
+	private URI getLocation(String add) {
+		URI uri = null;
+		
+		if(uriInfo != null) {
+			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+			uri = ub.path(add).build();
+		}
+		
+		return uri;
+	}
+	
+	// --------------------------------------------------------------------------
 
 	@GET
 	@Path("search/{find}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public ResultData<List<Bookmark>> search(
+	public Response search(
 		@PathParam("find") String find,
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
 		log.debug("search: " + find + " | page: " + page + " | size: " + size);
 		
-		return dao.findByName(find, page, size);
+		ResultData<List<Bookmark>> r = dao.findByName(find, page, size);
+		
+		return Response
+				.status(Status.OK)
+				.entity(r)
+				.header("Allow", "GET")
+				.location(getLocation())
+				.build();
 	}
 	
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public ResultData<List<Bookmark>> getList(
+	public Response getList(
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
 		log.debug("getList | page: " + page + " | size: " + size);
-		return dao.list(page, size);
+		
+		ResultData<List<Bookmark>> r = dao.list(page, size);
+		
+		return Response
+				.status(Status.OK)
+				.entity(r)
+				.header("Allow", "GET, POST")
+				.location(getLocation())
+				.build();
 	}
 
 	@GET
@@ -111,6 +149,8 @@ public class BookmarkRest {
 			return Response
 					.status(Status.OK)
 					.entity(bookmark)
+					.header("Allow", "PUT, DELETE")
+					.location(getLocation())
 					.build();
 		
 		} else {
@@ -137,17 +177,13 @@ public class BookmarkRest {
 		log.debug("insert");
 		Bookmark bookmark = dao.save(value);
 		
-		ResponseBuilder rb = Response
-				.status(Status.CREATED)				
+		return Response
+				.status(Status.CREATED)
+				.entity(bookmark)
 				.header("Allow", "GET, PUT, DELETE")
-				.entity(bookmark); 
-		
-		if(uriInfo != null) {
-			URI location = uriInfo.getRequestUriBuilder().path("" + bookmark.getId()).build();
-			rb.location(location);
-		}
-		
-		return rb.build();
+				.location(getLocation(bookmark.getId()))
+				.build();
+				
 	}
 
 	@PUT
@@ -162,6 +198,8 @@ public class BookmarkRest {
 		return Response
 				.status(Status.ACCEPTED)
 				.entity(bookmark)
+				.header("Allow", "GET, PUT, DELETE")
+				.location(getLocation())
 				.build();
 	}
 
