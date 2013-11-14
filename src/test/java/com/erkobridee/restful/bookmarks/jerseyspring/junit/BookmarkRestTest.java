@@ -49,7 +49,8 @@ public class BookmarkRestTest {
 	@Test
 	// RESTful GET .../search/{name}
 	public void testGetByName() {
-		ResultData<List<Bookmark>> r = rest.search(vo.getName(), 1, 10);
+		@SuppressWarnings("unchecked")
+		ResultData<List<Bookmark>> r = (ResultData<List<Bookmark>>) rest.search(vo.getName(), 1, 10).getEntity();
 
 		Assert.assertTrue(r.getData().size() > 0);
 	}
@@ -71,7 +72,8 @@ public class BookmarkRestTest {
 	@Test
 	// RESTful GET
 	public void testGetAll() {
-		ResultData<List<Bookmark>> r = rest.getList(1, 10);
+		@SuppressWarnings("unchecked")
+		ResultData<List<Bookmark>> r = (ResultData<List<Bookmark>>) rest.getList(1, 10).getEntity();
 
 		Assert.assertTrue(r.getData().size() > 0);
 	}
