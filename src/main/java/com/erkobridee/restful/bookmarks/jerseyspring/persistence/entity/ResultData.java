@@ -2,9 +2,6 @@ package com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class ResultData<T> implements Serializable {
 
 	// --------------------------------------------------------------------------
