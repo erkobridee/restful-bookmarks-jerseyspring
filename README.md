@@ -1,6 +1,6 @@
 # RESTful Bookmarks Jersey + Spring
 
-Exemplo de aplicação para salvar links, onde a interface utiliza AngularJS + Twitter Bootstrap e o lado do servidor utilizado o Jersey integrado com o Spring para disponibilizar um serviço de dados RESTful, que aceita uma comunicação JSON ou XML.
+Exemplo de aplicação para salvar links, onde a interface utiliza AngularJS + Twitter Bootstrap e o lado do servidor utilizado o Jersey integrado com o Spring para disponibilizar um serviço de dados RESTful. A comunicação entre o frontend e o backend é realizada com as informações serializadas em JSON.
 
 * [Histório / Alterações](https://github.com/erkobridee/restful-bookmarks-jerseyspring/releases)
 
