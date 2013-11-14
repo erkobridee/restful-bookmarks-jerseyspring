@@ -1,6 +1,15 @@
 package com.erkobridee.restful.bookmarks.jerseyspring.rest.resource;
 
-public class ResultMessage {
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class ResultMessage implements Serializable {
+	
+	// --------------------------------------------------------------------------
+	private static final long serialVersionUID = 4789540187689589078L;
+	// --------------------------------------------------------------------------
 	
 	private int code;
 	private String message;
