@@ -31,7 +31,7 @@ public class BookmarkRestTest {
 		vo.setDescription("BookmarkServiceTest Description");
 		vo.setUrl("http://service.bookmarkdomain.test/"
 				+ System.currentTimeMillis() + "/");
-		vo = rest.create(vo);
+		vo = (Bookmark) rest.create(vo).getEntity();
 
 		Assert.assertNotNull(vo.getId());
 	}
@@ -59,7 +59,7 @@ public class BookmarkRestTest {
 		vo.setDescription(vo.getDescription() + "++");
 		vo.setUrl(vo.getUrl() + System.currentTimeMillis());
 
-		vo = rest.update(vo);
+		vo = (Bookmark) rest.update(vo).getEntity();
 
 		Assert.assertEquals(vo.getName(), nameUpdated);
 	}
@@ -79,7 +79,7 @@ public class BookmarkRestTest {
 
 		rest.remove(id);
 
-		vo = rest.get(id);
+		vo = (Bookmark) rest.get(id).getEntity();
 
 		Assert.assertNull(vo);
 	}

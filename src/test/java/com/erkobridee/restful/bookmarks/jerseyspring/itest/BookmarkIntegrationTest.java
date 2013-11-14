@@ -59,7 +59,12 @@ public class BookmarkIntegrationTest {
 	
 	private Bookmark getById(Long id) {		
 		Map<String, String> vars = Collections.singletonMap("id", id + "");
-		return restTemplate.getForObject(getBaseUrl()+"/{id}", Bookmark.class, vars);
+		
+		try{
+			return restTemplate.getForObject(getBaseUrl()+"/{id}", Bookmark.class, vars);
+		} catch(Exception e) {}
+			
+		return null;
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package com.erkobridee.restful.bookmarks.jerseyspring.rest;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -12,7 +13,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +28,7 @@ import org.springframework.stereotype.Component;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.dao.IBookmarkDAO;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.Bookmark;
 import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultData;
+import com.erkobridee.restful.bookmarks.jerseyspring.rest.resource.ResultMessage;
 
 @Component
 @Scope("prototype")
@@ -30,9 +36,9 @@ import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultDa
 public class BookmarkRest {
 
 	/*
-	 * TODO: update
-	 * 
 	 * ref's
+	 * 
+	 * https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
 	 * 
 	 * examples
 	 * 	REST with Java (JAX-RS) using Jersey - Tutorial
@@ -40,6 +46,9 @@ public class BookmarkRest {
 	 * 
 	 * 	Extracting Request Parameters
 	 * 	http://docs.oracle.com/cd/E19776-01/820-4867/6nga7f5np/index.html
+	 * 
+	 * 	Get HTTP Header In JAX-RS
+	 * 	http://www.mkyong.com/webservices/jax-rs/get-http-header-in-jax-rs/
 	 * 
 	 * 	JAX-RS @QueryParam Example
 	 * 	http://www.mkyong.com/webservices/jax-rs/jax-rs-queryparam-example/
@@ -56,6 +65,10 @@ public class BookmarkRest {
 	
 	// --------------------------------------------------------------------------
 
+	@Context UriInfo uriInfo;
+	
+	// --------------------------------------------------------------------------
+	
 	@Autowired
 	private IBookmarkDAO dao;
 
@@ -69,7 +82,7 @@ public class BookmarkRest {
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
-		log.debug("search: " + find);
+		log.debug("search: " + find + " | page: " + page + " | size: " + size);
 		
 		return dao.findByName(find, page, size);
 	}
@@ -80,42 +93,103 @@ public class BookmarkRest {
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
-		log.debug("getList");
-		log.debug("page: " + page + " | size: " + size);		
+		log.debug("getList | page: " + page + " | size: " + size);
 		return dao.list(page, size);
 	}
 
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Bookmark get(@PathParam("id") String id) {
+	public Response get(@PathParam("id") String id) {
 		log.debug("getById: " + id);
-		return dao.findById(Long.valueOf(id));
+		
+		Bookmark bookmark = dao.findById(Long.valueOf(id));
+		
+		if(bookmark != null) {
+			
+			return Response
+					.status(Status.OK)
+					.entity(bookmark)
+					.build();
+		
+		} else {
+			
+			ResultMessage resultMessage = 
+				new ResultMessage(
+	                Status.NOT_FOUND.ordinal(), 
+	                "id: " + id + " not found."
+	            );
+			
+			return Response
+					.status(Status.NOT_FOUND)
+					.entity(resultMessage)
+					.build();
+			
+		}
 	}
 
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Bookmark create(Bookmark value) {
+	public Response create(Bookmark value) {
+		
 		log.debug("insert");
-		return dao.save(value);
+		Bookmark bookmark = dao.save(value);
+		URI location = uriInfo.getRequestUriBuilder().path("" + bookmark.getId()).build();
+		
+		return Response
+				.status(Status.CREATED)
+				.location(location)
+				.header("Allow", "GET, PUT, DELETE")
+				.entity(bookmark)
+				.build();
 	}
 
 	@PUT
 	@Path("{id}")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Bookmark update(Bookmark value) {
+	public Response update(Bookmark value) {
+		
 		log.debug("update");
-		return dao.save(value);
+		Bookmark bookmark = dao.save(value);
+		
+		return Response
+				.status(Status.ACCEPTED)
+				.entity(bookmark)
+				.build();
 	}
 
 	@DELETE
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void remove(@PathParam("id") String id) {
+	public Response remove(@PathParam("id") String id) {
+		
 		boolean flag = dao.remove(Long.valueOf(id));
 		log.debug("remove: " + id + " | status: " + flag);
+		
+		ResultMessage message;
+		
+		if(flag) {
+			
+			message = new ResultMessage(Status.ACCEPTED.ordinal(), "id: " + id + " removed.");
+			
+			return Response
+					.status(Status.ACCEPTED)
+					.entity(message)
+					.build();
+			
+		} else {
+			
+			message = new ResultMessage(Status.NOT_FOUND.ordinal(), "id: " + id + " not found.");
+			
+			return Response
+					.status(Status.NOT_FOUND)
+					.entity(message)
+					.build();
+			
+		}
+		
 	}
 
 }
