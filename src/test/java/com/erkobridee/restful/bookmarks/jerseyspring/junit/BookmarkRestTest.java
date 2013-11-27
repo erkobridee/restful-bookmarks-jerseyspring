@@ -2,8 +2,6 @@ package com.erkobridee.restful.bookmarks.jerseyspring.junit;
 
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -21,80 +19,120 @@ import com.erkobridee.restful.bookmarks.jerseyspring.rest.resource.ResultMessage
 @ContextConfiguration(locations = "classpath:META-INF/spring/applicationContext.xml")
 public class BookmarkRestTest {
 
+	//--------------------------------------------------------------------------
+	
 	@Autowired
 	private BookmarkRest rest;
 
 	private static Bookmark vo;
 
-	@Test
+	//--------------------------------------------------------------------------
 	// RESTful POST
-	public void testInsert() {
+	
+	@Test	
+	public void test_01_Create() {
 		vo = new Bookmark();
-		vo.setName("BookmarkServiceTest Name");
-		vo.setDescription("BookmarkServiceTest Description");
-		vo.setUrl("http://service.bookmarkdomain.test/"
-				+ System.currentTimeMillis() + "/");
+		vo.setName( "BookmarkServiceTest Name" );
+		vo.setDescription( "BookmarkServiceTest Description" );
+		vo.setUrl( "http://service.bookmarkdomain.test/"
+				+ System.currentTimeMillis() + "/" );
 		
-		vo = (Bookmark) rest.create(vo).getEntity();
+		vo = (Bookmark) rest.create( vo ).getEntity();
 
-		Assert.assertNotNull(vo.getId());
+		Assert.assertNotNull( vo.getId() );
 	}
 
-	@Test
-	// RESTful GET .../{id}
-	public void testGetById() {
-		Assert.assertNotNull(rest.get(vo.getId().toString()));
-	}
-
-	@Test
-	// RESTful GET .../search/{name}
-	public void testGetByName() {
+	//--------------------------------------------------------------------------
+	// RESTful GET
+	
+	@Test	
+	public void test_02_GetList() {
 		@SuppressWarnings("unchecked")
-		ResultData<List<Bookmark>> r = (ResultData<List<Bookmark>>) rest.search(vo.getName(), 1, 10).getEntity();
+		ResultData<List<Bookmark>> r = (ResultData<List<Bookmark>>) rest.getList( 1, 10 ).getEntity();
 
-		Assert.assertTrue(r.getData().size() > 0);
+		Assert.assertTrue( r.getData().size() > 0 );
+	}
+	
+	//--------------------------------------------------------------------------
+	// RESTful GET .../{id}
+	
+	private Bookmark getById( Long id ) {
+		Object entity = rest.get( id ).getEntity();
+		
+		if( entity instanceof Bookmark ) return (Bookmark) entity;
+		
+		return null;
+	}
+	
+	@Test
+	public void test_03_GetByInvalidId() {
+		Assert.assertNull( this.getById( Long.valueOf( -1 ) ) );
+	}
+	
+	@Test	
+	public void test_03_GetById() {
+		Assert.assertNotNull( this.getById( vo.getId() ) );
+	}
+	
+	//--------------------------------------------------------------------------
+	// RESTful GET .../search/{name}
+	
+	@SuppressWarnings("unchecked")
+	private ResultData<List<Bookmark>> getByName( String name ) {				
+		return (ResultData<List<Bookmark>>) rest.search( name, 1, 10 ).getEntity();
 	}
 
-	@Test
+	@Test	
+	public void test_04_GetByInvalidName() {
+		ResultData<List<Bookmark>> r = this.getByName( "***" + vo.getName() + "***" );
+
+		Assert.assertFalse( r.getData().size() > 0 );
+	}
+	
+	@Test	
+	public void test_04_GetByName() {
+		ResultData<List<Bookmark>> r = this.getByName( vo.getName() );
+
+		Assert.assertTrue( r.getData().size() > 0 );
+	}
+
+	//--------------------------------------------------------------------------
 	// RESTful PUT .../{id}
-	public void testUpdate() {
+	
+	@Test	
+	public void test_05_Update() {
 		String nameUpdated = vo.getName() + "++";
 
-		vo.setName(nameUpdated);
-		vo.setDescription(vo.getDescription() + "++");
-		vo.setUrl(vo.getUrl() + System.currentTimeMillis());
+		vo.setName( nameUpdated );
+		vo.setDescription( vo.getDescription() + "++" );
+		vo.setUrl( vo.getUrl() + System.currentTimeMillis() );
 
-		vo = (Bookmark) rest.update(vo).getEntity();
+		vo = (Bookmark) rest.update( vo ).getEntity();
 
-		Assert.assertEquals(vo.getName(), nameUpdated);
+		Assert.assertEquals( nameUpdated, vo.getName() );
 	}
 
+	//--------------------------------------------------------------------------
+	// RESTful DELETE .../{id}
+	
+	private ResultMessage deleteById( Long id ) {
+		return (ResultMessage) rest.remove( id ).getEntity();
+	}
+	
 	@Test
-	// RESTful GET
-	public void testGetAll() {
-		@SuppressWarnings("unchecked")
-		ResultData<List<Bookmark>> r = (ResultData<List<Bookmark>>) rest.getList(1, 10).getEntity();
-
-		Assert.assertTrue(r.getData().size() > 0);
+	public void test_06_DeleteByInvalidId() {
+		ResultMessage message = this.deleteById( Long.valueOf( -1 ) );
+		
+		Assert.assertEquals( 404, message.getCode() );
 	}
-
+	
 	@Test
-	// RESTful DELETE
-	public void testDelete() {
-		String id = vo.getId().toString();
-
-		rest.remove(id);
-
-		Response response = rest.get(id);
-
-		boolean flag = response.getEntity() instanceof ResultMessage;
+	public void test_06_DeleteById() {
+		ResultMessage message = this.deleteById( vo.getId() );
 		
-		Assert.assertTrue(flag);
-		
-		if(flag) {
-			ResultMessage rm = (ResultMessage) response.getEntity();
-			Assert.assertEquals(404, rm.getCode());
-		}
+		Assert.assertEquals( 202, message.getCode() );
 	}
+	
+	//--------------------------------------------------------------------------
 
 }

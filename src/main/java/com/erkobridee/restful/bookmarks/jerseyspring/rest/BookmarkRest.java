@@ -64,7 +64,7 @@ public class BookmarkRest {
 
 	// --------------------------------------------------------------------------
 	
-	private Logger log = LoggerFactory.getLogger(BookmarkRest.class);
+	private Logger log = LoggerFactory.getLogger( BookmarkRest.class );
 	
 	// --------------------------------------------------------------------------
 
@@ -78,19 +78,19 @@ public class BookmarkRest {
 	// --------------------------------------------------------------------------
 	
 	private URI getLocation() {
-		return getLocation("");
+		return getLocation( "" );
 	}
 	
-	private URI getLocation(Long id) {		
-		return getLocation("" + id);
+	private URI getLocation( Long id ) {		
+		return getLocation( "" + id );
 	}
 	
-	private URI getLocation(String add) {
+	private URI getLocation( String add ) {
 		URI uri = null;
 		
-		if(uriInfo != null) {
+		if( uriInfo != null ) {
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-			uri = ub.path(add).build();
+			uri = ub.path( add ).build();
 		}
 		
 		return uri;
@@ -106,15 +106,15 @@ public class BookmarkRest {
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
-		log.debug("search: " + find + " | page: " + page + " | size: " + size);
+		log.debug( "search: " + find + " [ page: " + page + " | size: " + size + " ]" );
 
-		ResultData<List<Bookmark>> r = dao.findByName(find, page, size);
+		ResultData<List<Bookmark>> r = dao.findByName( find, page, size );
 		
 		return Response
-				.status(Status.OK)
-				.entity(r)
-				.header("Allow", "GET")
-				.location(getLocation())
+				.status( Status.OK )
+				.entity( r )
+				.header( "Allow", "GET" )
+				.location( getLocation() )
 				.build();
 		
 	}
@@ -125,33 +125,34 @@ public class BookmarkRest {
 		@DefaultValue("1") @QueryParam("page") int page,
 		@DefaultValue("10") @QueryParam("size") int size
 	) {
-		log.debug("getList | page: " + page + " | size: " + size);
+		log.debug( "getList [ page: " + page + " | size: " + size + " ]" );
 		
-		ResultData<List<Bookmark>> rd = dao.list(page, size);
+		ResultData<List<Bookmark>> rd = dao.list( page, size );
 		
 		return Response
-				.status(Status.OK)
-				.entity(rd)
-				.header("Allow", "GET, POST")
-				.location(getLocation())
+				.status( Status.OK )
+				.entity( rd )
+				.header( "Allow", "GET, POST" )
+				.location( getLocation() )
 				.build();
 	}
 
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response get(@PathParam("id") String id) {
-		log.debug("getById: " + id);
+	public Response get( @PathParam("id") Long id ) {
 		
-		Bookmark bookmark = dao.findById(Long.valueOf(id));
+		log.debug( "getById: " + id );
 		
-		if(bookmark != null) {
+		Bookmark bookmark = dao.findById( id );
+		
+		if( bookmark != null ) {
 			
 			return Response
-					.status(Status.OK)
-					.entity(bookmark)
-					.header("Allow", "PUT, DELETE")
-					.location(getLocation())
+					.status( Status.OK )
+					.entity( bookmark )
+					.header( "Allow", "PUT, DELETE" )
+					.location( getLocation() )
 					.build();
 		
 		} else {
@@ -163,8 +164,8 @@ public class BookmarkRest {
 	            );
 			
 			return Response
-					.status(Status.NOT_FOUND)
-					.entity(resultMessage)
+					.status( Status.NOT_FOUND )
+					.entity( resultMessage )
 					.build();
 			
 		}
@@ -173,16 +174,17 @@ public class BookmarkRest {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response create(Bookmark value) {
+	public Response create( Bookmark value ) {
 		
-		log.debug("insert");
-		Bookmark bookmark = dao.save(value);
+		log.debug( "create" );
+		
+		Bookmark bookmark = dao.save( value );
 		
 		return Response
-				.status(Status.CREATED)
-				.entity(bookmark)
-				.header("Allow", "GET, PUT, DELETE")
-				.location(getLocation(bookmark.getId()))
+				.status( Status.CREATED )
+				.entity( bookmark )
+				.header( "Allow", "GET, PUT, DELETE" )
+				.location( getLocation( bookmark.getId() ) )
 				.build();
 				
 	}
@@ -191,45 +193,47 @@ public class BookmarkRest {
 	@Path("{id}")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response update(Bookmark value) {
+	public Response update( Bookmark value ) {
 		
-		log.debug("update");
-		Bookmark bookmark = dao.save(value);
+		log.debug( "update" );
+		
+		Bookmark bookmark = dao.save( value );
 		
 		return Response
-				.status(Status.ACCEPTED)
-				.entity(bookmark)
-				.header("Allow", "GET, PUT, DELETE")
-				.location(getLocation())
+				.status( Status.ACCEPTED )
+				.entity( bookmark )
+				.header( "Allow", "GET, PUT, DELETE" )
+				.location( getLocation() )
 				.build();
 	}
 
 	@DELETE
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response remove(@PathParam("id") String id) {
+	public Response remove( @PathParam("id") Long id ) {
 		
-		boolean flag = dao.remove(Long.valueOf(id));
-		log.debug("remove: " + id + " | status: " + flag);
+		boolean flag = dao.remove( id );
+		
+		log.debug( "remove: " + id + " | status: " + flag );
 		
 		ResultMessage message;
 		
-		if(flag) {
+		if( flag ) {
 			
-			message = new ResultMessage(Status.ACCEPTED.getStatusCode(), "id: " + id + " removed.");
+			message = new ResultMessage( Status.ACCEPTED.getStatusCode(), "id: " + id + " removed." );
 			
 			return Response
-					.status(Status.ACCEPTED)
-					.entity(message)
+					.status( Status.ACCEPTED )
+					.entity( message )
 					.build();
 			
 		} else {
 			
-			message = new ResultMessage(Status.NOT_FOUND.getStatusCode(), "id: " + id + " not found.");
+			message = new ResultMessage( Status.NOT_FOUND.getStatusCode(), "id: " + id + " not found." );
 			
 			return Response
-					.status(Status.NOT_FOUND)
-					.entity(message)
+					.status( Status.NOT_FOUND )
+					.entity( message )
 					.build();
 			
 		}
