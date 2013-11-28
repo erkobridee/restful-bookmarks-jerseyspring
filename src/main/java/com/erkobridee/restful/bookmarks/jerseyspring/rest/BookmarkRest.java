@@ -210,7 +210,7 @@ public class BookmarkRest {
 	@DELETE
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response remove( @PathParam("id") Long id ) {
+	public Response delete( @PathParam("id") Long id ) {
 		
 		boolean flag = dao.remove( id );
 		

@@ -116,7 +116,7 @@ public class BookmarkRestTest {
 	// RESTful DELETE .../{id}
 	
 	private ResultMessage deleteById( Long id ) {
-		return (ResultMessage) rest.remove( id ).getEntity();
+		return (ResultMessage) rest.delete( id ).getEntity();
 	}
 	
 	@Test

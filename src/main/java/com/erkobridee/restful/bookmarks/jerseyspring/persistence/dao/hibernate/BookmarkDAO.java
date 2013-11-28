@@ -21,11 +21,11 @@ import com.erkobridee.restful.bookmarks.jerseyspring.persistence.entity.ResultDa
 @Repository("bookmarkDAO")
 public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	
 	private Logger log = LoggerFactory.getLogger( BookmarkDAO.class );
 	
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 
 	@Autowired
 	public void init( SessionFactory sessionFactory ) {
@@ -37,7 +37,7 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 		this.generateInitData();
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 
 	public void generateInitData() {
 		
@@ -77,7 +77,7 @@ public class BookmarkDAO extends HibernateDaoSupport implements IBookmarkDAO {
 		}
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 
 	public Integer count() {
 		
